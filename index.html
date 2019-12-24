@@ -64,21 +64,25 @@
         </div>
       </div>
       <div class="table-container">
-        <table class="table is-bordered is-fullwidth">
-          <tbody>
-            <tr>
-              <td>38</td>
-              <td>23</td>
-              <td>12</td>
-              <td>3</td>
-              <td>68</td>
-              <td>36</td>
-              <td>+32</td>
-              <td>81</td>
-            </tr>
-          </tbody>
+        <table class="table is-bordered" id="result-table" style="margin: 0 auto;">
         </table>
       </div>
+      <article class="message is-dark is-hidden" id="result-box">
+          <div class="message-header">
+              <p id="result-box-title">Итог</p>
+              <button class="delete" aria-label="delete"></button>
+          </div>
+          <div class="message-body">
+              <h3 class="subtitle is-3">
+                <strong class="has-text-weight-bold">Количество итераций: </strong>
+                <span id="result-box-step"></span>
+              </h3>
+              <h3 class="subtitle is-3">
+                <strong class="has-text-weight-bold">Температура: </strong>
+                <span id="result-box-temperature"></span>
+              </h3>
+          </div>
+      </article>
     </div>
   </section>
   <script src="./dist/index.js"></script>

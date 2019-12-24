@@ -4,7 +4,7 @@ const getRandomInteger = (min: number, max: number): number => {
 };
 
 // N - размеры шахматной доски (NxN)
-const getInitChessBoard = (N: number = 8): number[] => {
+const getInitChessBoard = (N: number): number[] => {
   const initBoard: number[] = [];
   for (let i=0; i<N; i++) {
     initBoard.push(i);
@@ -64,14 +64,14 @@ class AnnealingResult implements IAnnealingResult {
   ) {}
 }
 
-const annealing = (N = 8, Tmax = 100, Tmin = 0, alpha = 0.9, maxIterations = 10000): IAnnealingResult => {
+const annealing = (N: number, Tmax: number, Tmin: number, alpha: number, maxIterations: number): IAnnealingResult => {
   let mainBoard = getInitChessBoard(N);
   let T = Tmax;
   let i = 0;
 
   if (calcEnergy(mainBoard) === 0) return new AnnealingResult(mainBoard, T, i);
 
-  while (i <= maxIterations || T > Tmin) {
+  while (i <= maxIterations && T > Tmin) {
     const mixedBoard = mixArray(mainBoard);
     const mixedBoardEnergy = calcEnergy(mixedBoard);
     if (mixedBoardEnergy === 0)
@@ -92,13 +92,61 @@ const annealing = (N = 8, Tmax = 100, Tmin = 0, alpha = 0.9, maxIterations = 100
   return new AnnealingResult([], T, i);
 };
 
+const drawChessBoard = (board: number[]) => {
+  const table = document.getElementById('result-table');
+  if (table) {
+    table.innerHTML = '';
+    const tbody = document.createElement('tbody');
+    for (let i = 0; i < board.length; i++) {
+      const tr = document.createElement('tr');
+      for (let j = 0; j < board.length; j++) {
+        const td = document.createElement('td');
+        const blackCondition = i % 2 === 0 ? j % 2 !== 0 : j % 2 === 0
+        if (blackCondition) td.classList.add('has-background-grey-lighter');
+        if (j === board[i]) td.innerHTML = 'X';
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+  }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('getResult')?.addEventListener('click', function() {
-    const N = + ((<HTMLInputElement>document.getElementById('N'))?.value || 8);
+    const N = +((<HTMLInputElement>document.getElementById('N'))?.value || 8);
     const Tmax = +((<HTMLInputElement>document.getElementById('Tmax'))?.value || 100);
-    const Tmin = +((<HTMLInputElement>document.getElementById('Tmin'))?.value || 0);
+    const Tmin = +((<HTMLInputElement>document.getElementById('Tmin'))?.value || 0.000001);
     const alpha = +((<HTMLInputElement>document.getElementById('alpha'))?.value || 0.95);
     const maxIterations = +((<HTMLInputElement>document.getElementById('maxIterations'))?.value || 10000);
-    console.log(annealing(N, Tmax, Tmin, alpha, maxIterations));
+    const result: IAnnealingResult = annealing(N, Tmax, Tmin, alpha, maxIterations);
+    const isSolved = result.board.length > 0;
+
+    if (isSolved) drawChessBoard(result.board);
+
+    const resultBox = document.getElementById('result-box');
+
+    if (resultBox) {
+      const hideResults = () => {
+        resultBox.classList.add('is-hidden');
+      }
+
+      const showResults = () => {
+        if (!isSolved) resultBox.classList.add('is-danger');
+        const title = document.getElementById('result-box-title');
+        const step = document.getElementById('result-box-step');
+        const temperature = document.getElementById('result-box-temperature');
+        if (title) {
+          title.innerHTML = isSolved ? 'Решение найдено' : 'Решение не найдено';
+        }
+        if (step) step.innerHTML = result.step.toString();
+        if (temperature) temperature.innerHTML = result.temperature.toFixed(4).toString();
+        resultBox.classList.remove('is-hidden');
+      };
+
+      resultBox.querySelector('.delete')?.addEventListener('click', () => hideResults());
+
+      showResults();
+    }
   });
 });
