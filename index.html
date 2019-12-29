@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <title>Queen Problem Annealing</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
 </head>
+
 <body>
   <section class="section">
     <div class="container">
@@ -68,23 +70,28 @@
         </table>
       </div>
       <article class="message is-dark is-hidden" id="result-box">
-          <div class="message-header">
-              <p id="result-box-title">Итог</p>
-              <button class="delete" aria-label="delete"></button>
-          </div>
-          <div class="message-body">
-              <h3 class="subtitle is-3">
-                <strong class="has-text-weight-bold">Количество итераций: </strong>
-                <span id="result-box-step"></span>
-              </h3>
-              <h3 class="subtitle is-3">
-                <strong class="has-text-weight-bold">Температура: </strong>
-                <span id="result-box-temperature"></span>
-              </h3>
-          </div>
+        <div class="message-header">
+          <p id="result-box-title">Итог</p>
+          <button class="delete" aria-label="delete"></button>
+        </div>
+        <div class="message-body">
+          <h3 class="subtitle is-3">
+            <strong class="has-text-weight-bold">Количество итераций: </strong>
+            <span id="result-box-step"></span>
+          </h3>
+          <h3 class="subtitle is-3">
+            <strong class="has-text-weight-bold">Температура: </strong>
+            <span id="result-box-temperature"></span>
+          </h3>
+          <h3 class="subtitle is-3">
+            <strong class="has-text-weight-bold">Кол-во ферзей под удар: </strong>
+            <span id="result-box-energy"></span>
+          </h3>
+        </div>
       </article>
     </div>
   </section>
   <script src="./dist/index.js"></script>
 </body>
+
 </html>
