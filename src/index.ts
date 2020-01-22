@@ -123,6 +123,18 @@ const drawChessBoard = (board: number[]) => {
   }
 };
 
+const getAnnealingResult = (N: number, Tmax: number, Tmin: number, alpha: number, maxIterations: number): IAnnealingResult => {
+  let k = 0;
+  while (k <= 1000) {
+    const r = annealing(N, Tmax, Tmin, alpha, maxIterations);
+    if (r.energy === 0) {
+      return r;
+    }
+    k++;
+  }
+  return annealing(N, Tmax, Tmin, alpha, maxIterations);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('getResult')?.addEventListener('click', function() {
     const N = +((<HTMLInputElement>document.getElementById('N'))?.value || 8);
@@ -130,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const Tmin = +((<HTMLInputElement>document.getElementById('Tmin'))?.value || 0.0000001);
     const alpha = +((<HTMLInputElement>document.getElementById('alpha'))?.value || 0.95);
     const maxIterations = +((<HTMLInputElement>document.getElementById('maxIterations'))?.value || 100000);
-    const result: IAnnealingResult = annealing(N, Tmax, Tmin, alpha, maxIterations);
+    let result: IAnnealingResult = getAnnealingResult(N, Tmax, Tmin, alpha, maxIterations);
 
     if (result.board.length) drawChessBoard(result.board);
 
